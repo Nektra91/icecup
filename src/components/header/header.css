@@ -1,0 +1,18 @@
+.header-container {
+    padding: 1rem;
+    background-color: #25516D;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+a {
+    color: white;
+}
+
+.link {
+    padding-right: 1rem;
+}
+

@@ -1,0 +1,17 @@
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input, button {
+    margin-bottom: 12px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 4px;
+}

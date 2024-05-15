@@ -1,0 +1,27 @@
+.applications {
+    margin-top: 1rem;
+    
+}
+
+.application {
+    width: calc(100vw - 200px);
+    border: 1px solid black;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+}
+
+.team-name {
+    padding: 0.5rem 0 0.5rem 1rem;
+    border-bottom: 1px solid black;
+    background-color: #25516D;
+    color: white;
+}
+
+.body-container {
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.body-div {
+    margin-right: 1rem;
+}
+

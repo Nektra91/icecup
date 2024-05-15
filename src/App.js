@@ -1,24 +1,54 @@
-import logo from './logo.svg';
+import Apply from "./components/apply";
+import Login from "./components/auth/login";
+import Register from "./components/auth/register";
+
+import Header from "./components/header";
+import Home from "./components/home/index";
+
 import './App.css';
 
+import { AuthProvider } from "./contexts/authContext";
+import { useRoutes } from "react-router-dom";
+import Applications from "./components/applications";
+import Competitions from "./components/competitions";
+
 function App() {
+  const routesArray = [
+    {
+      path: "*",
+      element: <Home />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+    {
+      path: "/home",
+      element: <Home />,
+    },
+    {
+      path: "/apply",
+      element: <Apply />,
+    },
+    {
+      path: "/applications",
+      element: <Applications />,
+    },
+    {
+        path: "/competitions",
+        element: <Competitions />
+    }
+  ];
+  let routesElement = useRoutes(routesArray);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <Header />
+      <div className="w-full h-screen flex flex-col">{routesElement}</div>
+    </AuthProvider>
   );
 }
 
