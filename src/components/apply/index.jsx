@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './apply.css';
 import {db} from '../../firebase/firebase';
-import { query, where, getDocs, collection, addDoc } from 'firebase/firestore';
+import { query, where, getDocs, collection, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import Spinner from '../common/spinner';
+import { useNavigate } from 'react-router-dom';
 
 const Apply = () => {
     const [loading, setLoading] = useState(false);
@@ -14,57 +15,62 @@ const Apply = () => {
     const [responsibleName, setResponsibleName] = useState('');
     const [responsibleEmail, setResponsibleEmail] = useState('');
     const [activeCompetitions, setActiveCompetitions] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchActiveCompetitions = async () => {
             setLoading(true);
             const q = query(collection(db, "competitions"), where("isActive", "==", true));
             const querySnapshot = await getDocs(q);
-            const competitions = [];
-            querySnapshot.forEach((doc) => {
-                competitions.push({ id: doc.id, ...doc.data() });
-            });
-            setActiveCompetitions(competitions);
+            const competitions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setActiveCompetitions(competitions.length > 0 ? [competitions[0]] : []);
             setLoading(false);
         };
  
         fetchActiveCompetitions();
     }, []);
-
     const handleAddMember = (e) => {
-        e.preventDefault();
         if (memberName) {
             setTeamMembers([...teamMembers, memberName]);
             setMemberName('');
         }
+        e.preventDefault();
     };
 
     const handleAddNationality = (e) => {
-        e.preventDefault();
         if (nationality) {
             setNationalities([...nationalities, nationality]);
             setNationality('');
         }
+        e.preventDefault();
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (activeCompetitions.length === 0) {
+            alert('No active competition available.');
+            return;
+        }
+    
+        const competitionId = activeCompetitions[0].id; // Assuming there's always one active competition
+        const competitionRef = doc(db, "competitions", competitionId);
+    
+        const applicationData = {
+            teamName,
+            teamMembers,
+            nationalities,
+            responsibleName,
+            responsibleEmail,
+            appliedOn: new Date(Date.now()).toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'}),
+            accepted: false
+        };
+    
         try {
-            await addDoc(collection(db, "applications"), {
-                teamName: teamName,
-                teamMembers: teamMembers,
-                nationalities: nationalities,
-                responsibleName: responsibleName,
-                responsibleEmail: responsibleEmail,
-                competitionId: activeCompetitions[0].id
-
+            await updateDoc(competitionRef, {
+                applications: arrayUnion(applicationData)
             });
-            alert('Application submitted successfully!');
-            setTeamName('');
-            setTeamMembers([]);
-            setNationalities([]);
-            setResponsibleName('');
-            setResponsibleEmail('');
+            navigate('/');
+    
         } catch (error) {
             console.error('Error submitting application:', error);
             alert('Failed to submit application.');
@@ -85,11 +91,12 @@ const Apply = () => {
                             <>
                                 <div>
                                     <h3>Active Competitions</h3>
-                                    <ul>
-                                        {activeCompetitions.map(comp => (
-                                            <li key={comp.id}>{comp.name}</li> // Assuming 'name' is a field in the competitions documents
-                                        ))}
-                                    </ul>
+                                    {activeCompetitions.map(comp => (
+                                        <>
+                                        <div>{comp.name}</div>
+                                        <div>{comp.maxTeams - comp.applications.length} spots open</div>
+                                        </>
+                                    ))}
                                 </div>
                                 <form onSubmit={handleSubmit}>
                                     <div>
