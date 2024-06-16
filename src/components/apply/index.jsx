@@ -4,6 +4,7 @@ import {db} from '../../firebase/firebase';
 import { query, where, getDocs, collection, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import Spinner from '../common/spinner';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const Apply = () => {
     const [loading, setLoading] = useState(false);
@@ -62,7 +63,8 @@ const Apply = () => {
             responsibleName,
             responsibleEmail,
             appliedOn: new Date(Date.now()).toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'}),
-            accepted: false
+            accepted: false,
+            id: uuidv4()
         };
     
         try {

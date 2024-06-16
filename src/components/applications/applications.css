@@ -1,6 +1,5 @@
 .applications {
     margin-top: 1rem;
-    
 }
 
 .application {
@@ -24,4 +23,13 @@
 .body-div {
     margin-right: 1rem;
 }
+
+.button {
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
+    display:flex;
+    gap: 1rem;
+}
+
+
 

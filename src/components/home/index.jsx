@@ -2,7 +2,11 @@ import React from 'react'
 
 const Home = () => {
     return (
-        <div className='text-2xl font-bold pt-14'></div>
+        <div className='page-container'>
+            <div>
+                This page is a work in progress.
+            </div>
+        </div>
     )
 }
 
