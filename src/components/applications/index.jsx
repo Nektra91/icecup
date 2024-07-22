@@ -179,6 +179,14 @@ const Applications = () => {
                                                 </div>
                                             ))}
                                     </div>
+                                    <div className='body-div'>
+                                        {app.curlingsClubs.map(club => 
+                                            (
+                                                <div>
+                                                    {club}
+                                                </div>
+                                            ))}
+                                    </div>
                                     <div className='flex-column body-div'>
                                         <div>{app.responsibleName}</div>
                                         <div>{app.responsibleEmail}</div>

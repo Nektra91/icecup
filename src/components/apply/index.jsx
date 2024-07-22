@@ -13,6 +13,8 @@ const Apply = () => {
     const [teamMembers, setTeamMembers] = useState([]);
     const [nationality, setNationality] = useState('');
     const [nationalities, setNationalities] = useState([]);
+    const [curlingClub, setCurlingClub] = useState('');
+    const [curlingsClubs, setCurlingsClubs] = useState([]);
     const [responsibleName, setResponsibleName] = useState('');
     const [responsibleEmail, setResponsibleEmail] = useState('');
     const [activeCompetitions, setActiveCompetitions] = useState([]);
@@ -46,6 +48,14 @@ const Apply = () => {
         e.preventDefault();
     };
 
+    const handleAddCurlingClub = (e) => {
+        if (curlingClub) {
+            setCurlingsClubs([...curlingsClubs, curlingClub]);
+            setCurlingClub('');
+        }
+        e.preventDefault();
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (activeCompetitions.length === 0) {
@@ -60,6 +70,7 @@ const Apply = () => {
             teamName,
             teamMembers,
             nationalities,
+            curlingsClubs,
             responsibleName,
             responsibleEmail,
             appliedOn: new Date(Date.now()).toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'}),
@@ -134,6 +145,20 @@ const Apply = () => {
                                         <ul>
                                             {nationalities.map((nat, index) => (
                                                 <li key={index}>{nat}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    <div className='flex-column'>
+                                        <label>Curling club:</label>
+                                        <input
+                                            type="text"
+                                            value={curlingClub}
+                                            onChange={(e) => setCurlingClub(e.target.value)}
+                                        />
+                                        <button onClick={handleAddCurlingClub}>Add Curling club</button>
+                                        <ul>
+                                            {curlingsClubs.map((club, index) => (
+                                                <li key={index}>{club}</li>
                                             ))}
                                         </ul>
                                     </div>
