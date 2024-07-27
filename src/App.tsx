@@ -5,9 +5,9 @@ import Register from "./components/auth/register";
 import Header from "./components/header";
 import Home from "./components/home/index";
 
-import './App.css';
+import "./App.css";
 
-import { AuthProvider } from "./contexts/authContext";
+import AuthContextProvider from "./contexts/authContext/index";
 import { useRoutes } from "react-router-dom";
 import Applications from "./components/applications";
 import Competitions from "./components/competitions";
@@ -39,16 +39,16 @@ function App() {
       element: <Applications />,
     },
     {
-        path: "/competitions",
-        element: <Competitions />
-    }
+      path: "/competitions",
+      element: <Competitions />,
+    },
   ];
   let routesElement = useRoutes(routesArray);
   return (
-    <AuthProvider>
+    <AuthContextProvider>
       <Header />
       <div className="w-full h-screen flex flex-col">{routesElement}</div>
-    </AuthProvider>
+    </AuthContextProvider>
   );
 }
 
