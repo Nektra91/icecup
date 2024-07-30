@@ -14,7 +14,6 @@ import { Spinner } from "../common/spinner";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { Competition } from "../../models/interfaces";
-import { Button } from "@mui/material";
 
 const Apply = () => {
   const [loading, setLoading] = useState(false);
@@ -211,7 +210,6 @@ const Apply = () => {
                 </div>
                 <button type="submit">Submit Application</button>
               </form>
-              <Button onClick={() => console.log("it works ")}>Works</Button>
             </>
           ) : (
             <>
