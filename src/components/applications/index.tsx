@@ -256,23 +256,23 @@ const Applications = () => {
                     ))}
                   </div>
                   <div className="body-div">
+                    {app.curlingsClubs.map((club) => (
+                      <div className="bold">{club}</div>
+                    ))}
                     {app.nationalities.map((nationality) => (
                       <div>{nationality}</div>
                     ))}
                   </div>
-                  <div className="body-div">
-                    {app.curlingsClubs.map((club) => (
-                      <div>{club}</div>
-                    ))}
-                  </div>
+                  
                   <div className="flex-column body-div">
+                    {app.accepted && (
+                      <div>Application accepted</div>
+                    )}
                     <div>{app.responsibleName}</div>
                     <div>{app.responsibleEmail}</div>
+                    <div>{app.appliedOn}</div>
                   </div>
-                  <div className="body-div">{app.appliedOn}</div>
-                  {app.accepted && (
-                    <div className="body-div">Application accepted</div>
-                  )}
+                  
                 </div>
                 {!app.accepted && (
                   <div className="flex-row">

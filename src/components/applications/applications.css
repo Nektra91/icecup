@@ -1,9 +1,14 @@
 .applications {
-    margin-top: 1rem;
+    margin: 1rem;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .application {
-    width: calc(100vw - 200px);
+    width: calc((100vw - 5rem) / 2);
+    height: 200px;
     border: 1px solid black;
     margin-top: 1rem;
     border-radius: 0.5rem;
@@ -17,11 +22,17 @@
 }
 
 .body-container {
-    padding: 0.5rem 0 0.5rem 1rem;
+    padding: 0.5rem 0 0.5rem 0;
+    height: 100px;
+    width: 100%;
 }
 
 .body-div {
-    margin-right: 1rem;
+    margin-left: 0.5rem;
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .button {
@@ -29,6 +40,10 @@
     padding-bottom: 0.5rem;
     display:flex;
     gap: 1rem;
+}
+
+.bold {
+    font-style:oblique;
 }
 
 
