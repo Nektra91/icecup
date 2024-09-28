@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./apply.css";
 import { db } from "../../firebase/firebase";
 import {
   query,
@@ -10,10 +9,21 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
-import { Spinner } from "../common/spinner";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { Competition } from "../../models/interfaces";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 
 const Apply = () => {
   const [loading, setLoading] = useState(false);
@@ -26,9 +36,7 @@ const Apply = () => {
   const [curlingsClubs, setCurlingsClubs] = useState<string[]>([]);
   const [responsibleName, setResponsibleName] = useState("");
   const [responsibleEmail, setResponsibleEmail] = useState("");
-  const [activeCompetitions, setActiveCompetitions] = useState<Competition[]>(
-    []
-  );
+  const [activeCompetitions, setActiveCompetitions] = useState<Competition[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,28 +63,29 @@ const Apply = () => {
 
     fetchActiveCompetitions();
   }, []);
+
   const handleAddMember = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (memberName) {
       setTeamMembers([...teamMembers, memberName]);
       setMemberName("");
     }
-    e.preventDefault();
   };
 
   const handleAddNationality = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (nationality) {
       setNationalities([...nationalities, nationality]);
       setNationality("");
     }
-    e.preventDefault();
   };
 
   const handleAddCurlingClub = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (curlingClub) {
       setCurlingsClubs([...curlingsClubs, curlingClub]);
       setCurlingClub("");
     }
-    e.preventDefault();
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -86,7 +95,7 @@ const Apply = () => {
       return;
     }
 
-    const competitionId = activeCompetitions[0].id; // Assuming there's always one active competition
+    const competitionId = activeCompetitions[0].id;
     const competitionRef = doc(db, "competitions", competitionId);
 
     const applicationData = {
@@ -117,108 +126,118 @@ const Apply = () => {
   };
 
   return (
-    <div className="page-container">
+    <Container maxWidth="sm">
       {loading ? (
-        <>
-          <Spinner isLoading={loading} />
-        </>
+        <Box display="flex" justifyContent="center" m={4}>
+          <CircularProgress />
+        </Box>
       ) : (
         <>
           {activeCompetitions.length === 1 ? (
             <>
-              <div>
-                <h3>Active Competitions</h3>
+              <Paper elevation={3} sx={{ p: 3, mt: 4, mb: 4 }}>
+                <Typography variant="h5" gutterBottom>
+                  Active Competitions
+                </Typography>
                 {activeCompetitions.map((comp) => (
-                  <>
-                    <div>{comp.name}</div>
-                    <div>
+                  <Box key={comp.id}>
+                    <Typography variant="subtitle1">{comp.name}</Typography>
+                    <Typography variant="body2">
                       {comp.maxTeams - comp.applications.length} spots open
-                    </div>
-                  </>
+                    </Typography>
+                  </Box>
                 ))}
-              </div>
+              </Paper>
               <form onSubmit={handleSubmit}>
-                <div>
-                  <label>Team Name:</label>
-                  <input
-                    type="text"
-                    value={teamName}
-                    onChange={(e) => setTeamName(e.target.value)}
-                  />
-                </div>
-                <div className="flex-column">
-                  <label>Team Member Name:</label>
-                  <input
-                    type="text"
+                <TextField
+                  fullWidth
+                  label="Team Name"
+                  value={teamName}
+                  onChange={(e) => setTeamName(e.target.value)}
+                  margin="normal"
+                />
+                <Box mt={2}>
+                  <TextField
+                    fullWidth
+                    label="Team Member Name"
                     value={memberName}
                     onChange={(e) => setMemberName(e.target.value)}
                   />
-                  <button onClick={handleAddMember}>Add Member</button>
-                  <ul>
+                  <Button onClick={handleAddMember} variant="contained" sx={{ mt: 1 }}>
+                    Add Member
+                  </Button>
+                  <List>
                     {teamMembers.map((member, index) => (
-                      <li key={index}>{member}</li>
+                      <ListItem key={index}>
+                        <ListItemText primary={member} />
+                      </ListItem>
                     ))}
-                  </ul>
-                </div>
-                <div className="flex-column">
-                  <label>Nationality:</label>
-                  <input
-                    type="text"
+                  </List>
+                </Box>
+                <Box mt={2}>
+                  <TextField
+                    fullWidth
+                    label="Nationality"
                     value={nationality}
                     onChange={(e) => setNationality(e.target.value)}
                   />
-                  <button onClick={handleAddNationality}>
+                  <Button onClick={handleAddNationality} variant="contained" sx={{ mt: 1 }}>
                     Add Nationality
-                  </button>
-                  <ul>
+                  </Button>
+                  <List>
                     {nationalities.map((nat, index) => (
-                      <li key={index}>{nat}</li>
+                      <ListItem key={index}>
+                        <ListItemText primary={nat} />
+                      </ListItem>
                     ))}
-                  </ul>
-                </div>
-                <div className="flex-column">
-                  <label>Curling club:</label>
-                  <input
-                    type="text"
+                  </List>
+                </Box>
+                <Box mt={2}>
+                  <TextField
+                    fullWidth
+                    label="Curling Club"
                     value={curlingClub}
                     onChange={(e) => setCurlingClub(e.target.value)}
                   />
-                  <button onClick={handleAddCurlingClub}>
-                    Add Curling club
-                  </button>
-                  <ul>
+                  <Button onClick={handleAddCurlingClub} variant="contained" sx={{ mt: 1 }}>
+                    Add Curling Club
+                  </Button>
+                  <List>
                     {curlingsClubs.map((club, index) => (
-                      <li key={index}>{club}</li>
+                      <ListItem key={index}>
+                        <ListItemText primary={club} />
+                      </ListItem>
                     ))}
-                  </ul>
-                </div>
-                <div>
-                  <label>Responsible Person's Name:</label>
-                  <input
-                    type="text"
-                    value={responsibleName}
-                    onChange={(e) => setResponsibleName(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label>Responsible Person's Email:</label>
-                  <input
-                    type="email"
-                    value={responsibleEmail}
-                    onChange={(e) => setResponsibleEmail(e.target.value)}
-                  />
-                </div>
-                <button type="submit">Submit Application</button>
+                  </List>
+                </Box>
+                <TextField
+                  fullWidth
+                  label="Responsible Person's Name"
+                  value={responsibleName}
+                  onChange={(e) => setResponsibleName(e.target.value)}
+                  margin="normal"
+                />
+                <TextField
+                  fullWidth
+                  label="Responsible Person's Email"
+                  type="email"
+                  value={responsibleEmail}
+                  onChange={(e) => setResponsibleEmail(e.target.value)}
+                  margin="normal"
+                />
+                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                  Submit Application
+                </Button>
               </form>
             </>
           ) : (
-            <>
-              <h3>No active competitions</h3>
-            </>
+            <Typography variant="h5" sx={{ mt: 4 }}>
+              No active competitions
+            </Typography>
           )}
         </>
       )}
-    </div>
+    </Container>
   );
 };
 

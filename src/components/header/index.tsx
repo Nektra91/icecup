@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
 import "./header.css";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext, AuthContextType } from "../../contexts/authContext/index";
 import { doSignOut } from "../../firebase/auth";
+import { useContext } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
