@@ -11,6 +11,7 @@ import AuthContextProvider from "./contexts/authContext/index";
 import { useRoutes } from "react-router-dom";
 import Applications from "./components/applications";
 import Competitions from "./components/competitions";
+import FAQ from "./components/FAQ";
 
 function App() {
   const routesArray = [
@@ -41,6 +42,10 @@ function App() {
     {
       path: "/competitions",
       element: <Competitions />,
+    },
+    {
+      path: "/faq",
+      element: <FAQ />,
     },
   ];
   let routesElement = useRoutes(routesArray);

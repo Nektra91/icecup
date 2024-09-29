@@ -39,6 +39,9 @@ const Header = () => {
               <div className="link">
                 <Link to={"/competitions"}>Competitions</Link>
               </div>
+              <div className="link">
+                <Link to={"/faq"}>FAQ</Link>
+              </div>
             </div>
           </>
         )}
