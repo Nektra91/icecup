@@ -1,17 +1,15 @@
 import Apply from "./components/apply";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
-
 import Header from "./components/header";
 import Home from "./components/home/index";
-
 import "./App.css";
-
 import AuthContextProvider from "./contexts/authContext/index";
 import { useRoutes } from "react-router-dom";
 import Applications from "./components/applications";
 import Competitions from "./components/competitions";
 import FAQ from "./components/FAQ";
+import EditApplication from "./components/edit-application"; // Import the new component
 
 function App() {
   const routesArray = [
@@ -47,12 +45,16 @@ function App() {
       path: "/faq",
       element: <FAQ />,
     },
+    {
+      path: "/edit-application/:id",
+      element: <EditApplication />,
+    },
   ];
   let routesElement = useRoutes(routesArray);
   return (
     <AuthContextProvider>
       <Header />
-      <div className="w-full h-screen flex flex-col">{routesElement}</div>
+      <div className="content">{routesElement}</div>
     </AuthContextProvider>
   );
 }

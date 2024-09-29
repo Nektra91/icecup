@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   query,
   where,
@@ -22,7 +23,9 @@ import {
   Divider,
   Container,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { Application, Competition } from "../../models/interfaces";
 
 const Applications = () => {
@@ -30,6 +33,7 @@ const Applications = () => {
   const [activeCompetitions, setActiveCompetitions] = useState<Competition[]>(
     []
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchActiveCompetitions = async () => {
@@ -249,9 +253,14 @@ const Applications = () => {
   const ApplicationCard = ({ app, isWaitingList = false }: { app: Record<string, any>; isWaitingList?: boolean }) => (
     <Card sx={{ mb: 2, boxShadow: 3 }}>
       <CardContent>
-        <Typography variant="h5" component="div" gutterBottom>
-          {app.teamName}
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography variant="h5" component="div" gutterBottom>
+            {app.teamName}
+          </Typography>
+          <IconButton onClick={() => navigate(`/edit-application/${app.id}`, { state: { app, competitionId: activeCompetitions[0].id } })}>
+            <EditIcon />
+          </IconButton>
+        </Box>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <Typography variant="subtitle1" gutterBottom>Team Members:</Typography>

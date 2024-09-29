@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Box, Button } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import { AuthContext, AuthContextType } from "../../contexts/authContext/index";
