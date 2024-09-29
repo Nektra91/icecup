@@ -225,7 +225,7 @@ const Apply = () => {
                   onChange={(e) => setResponsibleEmail(e.target.value)}
                   margin="normal"
                 />
-                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2, mb: 2 }}>
                   Submit Application
                 </Button>
               </form>
