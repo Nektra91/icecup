@@ -1,18 +1,27 @@
-.header-container {
-    padding: 1rem;
-    background-color: #25516D;
-}
-
-.container {
-    display: flex;
-    flex-direction: row;
-}
-
-a {
+.nav-link {
     color: white;
-}
-
-.link {
-    padding-right: 1rem;
-}
-
+    text-decoration: none;
+    margin-right: 20px;
+    font-weight: bold;
+  }
+  
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+  
+  .menu-link {
+    color: black; /* Ensure the links are visible in the dropdown */
+    text-decoration: none;
+    display: block;
+    width: 100%;
+  }
+  
+  .menu-link:hover {
+    text-decoration: underline;
+  }
+  
+  .logo {
+    width: 32px;
+    height: 32px;
+    margin-right: 20px;
+  }
