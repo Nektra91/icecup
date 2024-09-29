@@ -11,9 +11,18 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { useEffect, useState } from "react";
-import "./applications.css";
-import Button from "@mui/material/Button";
-import Spinner from "../common/spinner";
+import {
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Chip,
+  Box,
+  Divider,
+  Container,
+  CircularProgress,
+} from "@mui/material";
 import { Application, Competition } from "../../models/interfaces";
 
 const Applications = () => {
@@ -237,129 +246,100 @@ const Applications = () => {
     setActiveCompetitions(competitions.length > 0 ? [competitions[0]] : []);
   };
 
+  const ApplicationCard = ({ app, isWaitingList = false }: { app: Record<string, any>; isWaitingList?: boolean }) => (
+    <Card sx={{ mb: 2, boxShadow: 3 }}>
+      <CardContent>
+        <Typography variant="h5" component="div" gutterBottom>
+          {app.teamName}
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="subtitle1" gutterBottom>Team Members:</Typography>
+            {app.teamMembers.map((member: string, index: number) => (
+              <Typography key={index} variant="body2">{member}</Typography>
+            ))}
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="subtitle1" gutterBottom>Curling Clubs:</Typography>
+            {app.curlingsClubs.map((club: string, index: number) => (
+              <Chip key={index} label={club} sx={{ mr: 1, mb: 1 }} />
+            ))}
+            <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>Nationalities:</Typography>
+            {app.nationalities.map((nationality: string, index: number) => (
+              <Chip key={index} label={nationality} sx={{ mr: 1, mb: 1 }} />
+            ))}
+          </Grid>
+        </Grid>
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="body2">Responsible: {app.responsibleName}</Typography>
+          <Typography variant="body2">Email: {app.responsibleEmail}</Typography>
+          <Typography variant="body2">Applied on: {app.appliedOn}</Typography>
+        </Box>
+        {app.accepted && (
+          <Chip label="Application accepted" color="success" sx={{ mt: 2 }} />
+        )}
+        {!app.accepted && (
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
+            {!isWaitingList ? (
+              <>
+                <Button variant="contained" color="success" onClick={() => approveApplication(app.id)}>
+                  Confirm
+                </Button>
+                <Button variant="contained" color="primary" onClick={() => moveApplicationToWaitingList(app.id)}>
+                  Move to waiting list
+                </Button>
+                <Button variant="contained" color="error" onClick={() => deleteApplication(app.id)}>
+                  Delete
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="contained" color="primary" onClick={() => moveApplicationOffWaitingList(app.id)}>
+                  Move off waiting list
+                </Button>
+                <Button variant="contained" color="error" onClick={() => deleteApplicationFromWaitingList(app.id)}>
+                  Delete
+                </Button>
+              </>
+            )}
+          </Box>
+        )}
+      </CardContent>
+    </Card>
+  );
+
   return (
-    <div className="page-container">
+    <Container maxWidth="lg">
       {loading ? (
-        <>
-          <Spinner isLoading={loading} />
-        </>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <CircularProgress />
+        </Box>
       ) : (
         <>
-          <div className="flex-column applications">
+          <Typography variant="h4" component="h1" gutterBottom sx={{ mt: 4, mb: 2 }}>
+            Applications
+          </Typography>
+          <Box sx={{ mb: 4 }}>
             {activeCompetitions[0].applications.map((app) => (
-              <div className="flex-column application" key={app.id}>
-                <div className="team-name">{app.teamName}</div>
-                <div className="body-container flex-row">
-                  <div className="body-div">
-                    {app.teamMembers.map((member) => (
-                      <div>{member}</div>
-                    ))}
-                  </div>
-                  <div className="body-div">
-                    {app.curlingsClubs.map((club) => (
-                      <div className="bold">{club}</div>
-                    ))}
-                    {app.nationalities.map((nationality) => (
-                      <div>{nationality}</div>
-                    ))}
-                  </div>
-                  
-                  <div className="flex-column body-div">
-                    {app.accepted && (
-                      <div>Application accepted</div>
-                    )}
-                    <div>{app.responsibleName}</div>
-                    <div>{app.responsibleEmail}</div>
-                    <div>{app.appliedOn}</div>
-                  </div>
-                  
-                </div>
-                {!app.accepted && (
-                  <div className="flex-row">
-                    <div
-                      className="button"
-                      onClick={() => approveApplication(app.id)}
-                    >
-                      <Button variant="contained" color="success">
-                        Confirm
-                      </Button>
-                    </div>
-                    <div
-                      className="button"
-                      onClick={() => moveApplicationToWaitingList(app.id)}
-                    >
-                      <Button variant="contained" color="success">
-                        Move to waiting list
-                      </Button>
-                    </div>
-                    <div
-                      className="button"
-                      onClick={() => deleteApplication(app.id)}
-                    >
-                      <Button variant="contained" color="error">
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <ApplicationCard key={app.id} app={app} />
             ))}
-          </div>
+          </Box>
           {activeCompetitions[0].waitingList.length > 0 && (
-            <div>
-              <div>
-                Teams on waiting list {activeCompetitions[0].waitingList.length}
-              </div>
-              {activeCompetitions[0].waitingList.map((app) => (
-                <div className="flex-column application" key={app.id}>
-                  <div className="team-name">{app.teamName}</div>
-                  <div className="body-container flex-row">
-                    <div className="body-div">
-                      {app.teamMembers.map((member: string) => (
-                        <div>{member}</div>
-                      ))}
-                    </div>
-                    <div className="body-div">
-                      {app.nationalities.map((nationality: string) => (
-                        <div>{nationality}</div>
-                      ))}
-                    </div>
-                    <div className="flex-column body-div">
-                      <div>{app.responsibleName}</div>
-                      <div>{app.responsibleEmail}</div>
-                    </div>
-                    <div className="body-div">{app.appliedOn}</div>
-                    {app.accepted && (
-                      <div className="body-div">Application accepted</div>
-                    )}
-                  </div>
-                  {!app.accepted && (
-                    <div className="flex-row">
-                      <div
-                        className="button"
-                        onClick={() => moveApplicationOffWaitingList(app.id)}
-                      >
-                        <Button variant="contained" color="success">
-                          Move off waiting list
-                        </Button>
-                      </div>
-                      <div
-                        className="button"
-                        onClick={() => deleteApplicationFromWaitingList(app.id)}
-                      >
-                        <Button variant="contained" color="error">
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            <>
+              <Divider sx={{ mb: 2 }} />
+              <Typography variant="h5" gutterBottom>
+                Waiting List ({activeCompetitions[0].waitingList.length} teams)
+              </Typography>
+              <Box>
+                {activeCompetitions[0].waitingList.map((app) => (
+                  <ApplicationCard key={app.id} app={app} isWaitingList={true} />
+                ))}
+              </Box>
+            </>
           )}
         </>
       )}
-    </div>
+    </Container>
   );
 };
 
