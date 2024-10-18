@@ -1,4 +1,3 @@
-import Apply from "./components/apply";
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
 import Header from "./components/header";
@@ -10,6 +9,7 @@ import Applications from "./components/applications";
 import Competitions from "./components/competitions";
 import FAQ from "./components/FAQ";
 import EditApplication from "./components/edit-application"; // Import the new component
+import NewApplication from "./components/new-application/NewApplication";
 
 function App() {
   const routesArray = [
@@ -31,7 +31,7 @@ function App() {
     },
     {
       path: "/apply",
-      element: <Apply />,
+      element: <NewApplication />,
     },
     {
       path: "/applications",

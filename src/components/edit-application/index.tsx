@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { db } from "../../firebase/firebase";
-import {
-  doc,
-  updateDoc,
-  getDoc
-} from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import {
   Container,
   Typography,
@@ -25,17 +21,24 @@ import { Application } from "../../models/interfaces";
 const EditApplication = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const application = location.state?.app;
+
+  const application = location.state?.application;
   const competitionId = location.state.competitionId;
 
   const [loading, setLoading] = useState(false);
   const [teamName, setTeamName] = useState(application?.teamName || "");
   const [memberName, setMemberName] = useState("");
-  const [teamMembers, setTeamMembers] = useState<string[]>(application?.teamMembers || []);
+  const [teamMembers, setTeamMembers] = useState<string[]>(
+    application?.teamMembers || []
+  );
   const [nationality, setNationality] = useState("");
-  const [nationalities, setNationalities] = useState<string[]>(application?.nationalities || []);
+  const [nationalities, setNationalities] = useState<string[]>(
+    application?.nationalities || []
+  );
   const [curlingClub, setCurlingClub] = useState("");
-  const [curlingsClubs, setCurlingsClubs] = useState<string[]>(application?.curlingsClubs || []);
+  const [curlingsClubs, setCurlingsClubs] = useState<string[]>(
+    application?.curlingsClubs || []
+  );
 
   const handleAddMember = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -82,12 +85,23 @@ const EditApplication = () => {
       const compDoc = await getDoc(competitionRef);
       const applications =
         (compDoc?.data?.()?.applications as Application[]) || [];
-      const applicationToUpdate = applications.find((app) => app.id === application.id);
+      const applicationToUpdate = applications.find(
+        (app) => app.id === application.id
+      );
 
       if (applicationToUpdate) {
         await updateDoc(competitionRef, {
           applications: applications.map((updatedApp) =>
-            updatedApp.id === application.id ? { ...updatedApp, accepted: true, curlingsClubs: curlingsClubs, nationalities: nationalities, teamMembers: teamMembers, teamName: teamName } : updatedApp
+            updatedApp.id === application.id
+              ? {
+                  ...updatedApp,
+                  accepted: true,
+                  curlingsClubs: curlingsClubs,
+                  nationalities: nationalities,
+                  teamMembers: teamMembers,
+                  teamName: teamName,
+                }
+              : updatedApp
           ),
         });
       }
@@ -127,7 +141,11 @@ const EditApplication = () => {
                   value={memberName}
                   onChange={(e) => setMemberName(e.target.value)}
                 />
-                <Button onClick={handleAddMember} variant="contained" sx={{ mt: 1 }}>
+                <Button
+                  onClick={handleAddMember}
+                  variant="contained"
+                  sx={{ mt: 1 }}
+                >
                   Add Member
                 </Button>
                 <List>
@@ -135,7 +153,11 @@ const EditApplication = () => {
                     <ListItem
                       key={index}
                       secondaryAction={
-                        <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveMember(index)}>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => handleRemoveMember(index)}
+                        >
                           <ClearIcon color="error" />
                         </IconButton>
                       }
@@ -152,7 +174,11 @@ const EditApplication = () => {
                   value={nationality}
                   onChange={(e) => setNationality(e.target.value)}
                 />
-                <Button onClick={handleAddNationality} variant="contained" sx={{ mt: 1 }}>
+                <Button
+                  onClick={handleAddNationality}
+                  variant="contained"
+                  sx={{ mt: 1 }}
+                >
                   Add Nationality
                 </Button>
                 <List>
@@ -160,7 +186,11 @@ const EditApplication = () => {
                     <ListItem
                       key={index}
                       secondaryAction={
-                        <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveNationality(index)}>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => handleRemoveNationality(index)}
+                        >
                           <ClearIcon color="error" />
                         </IconButton>
                       }
@@ -177,7 +207,11 @@ const EditApplication = () => {
                   value={curlingClub}
                   onChange={(e) => setCurlingClub(e.target.value)}
                 />
-                <Button onClick={handleAddCurlingClub} variant="contained" sx={{ mt: 1 }}>
+                <Button
+                  onClick={handleAddCurlingClub}
+                  variant="contained"
+                  sx={{ mt: 1 }}
+                >
                   Add Curling Club
                 </Button>
                 <List>
@@ -185,7 +219,11 @@ const EditApplication = () => {
                     <ListItem
                       key={index}
                       secondaryAction={
-                        <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveCurlingClub(index)}>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => handleRemoveCurlingClub(index)}
+                        >
                           <ClearIcon color="error" />
                         </IconButton>
                       }
@@ -195,7 +233,13 @@ const EditApplication = () => {
                   ))}
                 </List>
               </Box>
-              <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2, mb: 2 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mt: 2, mb: 2 }}
+              >
                 Update Application
               </Button>
             </form>

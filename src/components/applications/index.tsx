@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   query,
   where,
@@ -13,27 +12,20 @@ import {
 import { db } from "../../firebase/firebase";
 import { useEffect, useState } from "react";
 import {
-  Button,
-  Card,
-  CardContent,
   Typography,
-  Grid,
-  Chip,
   Box,
   Divider,
   Container,
   CircularProgress,
-  IconButton,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import { Application, Competition } from "../../models/interfaces";
+import { ApplicationCard } from "../common/UI";
 
 const Applications = () => {
   const [loading, setLoading] = useState(true);
   const [activeCompetitions, setActiveCompetitions] = useState<Competition[]>(
     []
   );
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchActiveCompetitions = async () => {
@@ -250,87 +242,37 @@ const Applications = () => {
     setActiveCompetitions(competitions.length > 0 ? [competitions[0]] : []);
   };
 
-  const ApplicationCard = ({ app, isWaitingList = false }: { app: Record<string, any>; isWaitingList?: boolean }) => (
-    <Card sx={{ mb: 2, boxShadow: 3 }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h5" component="div" gutterBottom>
-            {app.teamName}
-          </Typography>
-          <IconButton onClick={() => navigate(`/edit-application/${app.id}`, { state: { app, competitionId: activeCompetitions[0].id } })}>
-            <EditIcon />
-          </IconButton>
-        </Box>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1" gutterBottom>Team Members:</Typography>
-            {app.teamMembers.map((member: string, index: number) => (
-              <Typography key={index} variant="body2">{member}</Typography>
-            ))}
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle1" gutterBottom>Curling Clubs:</Typography>
-            {app.curlingsClubs.map((club: string, index: number) => (
-              <Chip key={index} label={club} sx={{ mr: 1, mb: 1 }} />
-            ))}
-            <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>Nationalities:</Typography>
-            {app.nationalities.map((nationality: string, index: number) => (
-              <Chip key={index} label={nationality} sx={{ mr: 1, mb: 1 }} />
-            ))}
-          </Grid>
-        </Grid>
-        <Box sx={{ mt: 2 }}>
-          <Typography variant="body2">Responsible: {app.responsibleName}</Typography>
-          <Typography variant="body2">Email: {app.responsibleEmail}</Typography>
-          <Typography variant="body2">Applied on: {app.appliedOn}</Typography>
-        </Box>
-        {app.accepted && (
-          <Chip label="Application accepted" color="success" sx={{ mt: 2 }} />
-        )}
-        {!app.accepted && (
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-            {!isWaitingList ? (
-              <>
-                <Button variant="contained" color="success" onClick={() => approveApplication(app.id)}>
-                  Confirm
-                </Button>
-                <Button variant="contained" color="primary" onClick={() => moveApplicationToWaitingList(app.id)}>
-                  Move to waiting list
-                </Button>
-                <Button variant="contained" color="error" onClick={() => deleteApplication(app.id)}>
-                  Delete
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="contained" color="primary" onClick={() => moveApplicationOffWaitingList(app.id)}>
-                  Move off waiting list
-                </Button>
-                <Button variant="contained" color="error" onClick={() => deleteApplicationFromWaitingList(app.id)}>
-                  Delete
-                </Button>
-              </>
-            )}
-          </Box>
-        )}
-      </CardContent>
-    </Card>
-  );
-
   return (
     <Container maxWidth="lg">
       {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
         </Box>
       ) : (
         <>
-          <Typography variant="h4" component="h1" gutterBottom sx={{ mt: 4, mb: 2 }}>
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            sx={{ mt: 4, mb: 2 }}
+          >
             Applications
           </Typography>
           <Box sx={{ mb: 4 }}>
             {activeCompetitions[0].applications.map((app) => (
-              <ApplicationCard key={app.id} app={app} />
+              <ApplicationCard
+                key={app.id}
+                application={app}
+                canEdit={true}
+                competitionId={activeCompetitions[0].id}
+                approveApplication={approveApplication}
+                moveApplicationToWaitingList={moveApplicationToWaitingList}
+                deleteApplication={deleteApplication}
+                moveApplicationOffWaitingList={moveApplicationOffWaitingList}
+                deleteApplicationFromWaitingList={
+                  deleteApplicationFromWaitingList
+                }
+              />
             ))}
           </Box>
           {activeCompetitions[0].waitingList.length > 0 && (
@@ -341,7 +283,22 @@ const Applications = () => {
               </Typography>
               <Box>
                 {activeCompetitions[0].waitingList.map((app) => (
-                  <ApplicationCard key={app.id} app={app} isWaitingList={true} />
+                  <ApplicationCard
+                    key={app.id}
+                    application={app}
+                    isWaitingList={true}
+                    competitionId={activeCompetitions[0].id}
+                    canEdit={true}
+                    approveApplication={approveApplication}
+                    moveApplicationToWaitingList={moveApplicationToWaitingList}
+                    deleteApplication={deleteApplication}
+                    moveApplicationOffWaitingList={
+                      moveApplicationOffWaitingList
+                    }
+                    deleteApplicationFromWaitingList={
+                      deleteApplicationFromWaitingList
+                    }
+                  />
                 ))}
               </Box>
             </>

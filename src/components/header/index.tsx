@@ -1,7 +1,15 @@
 import React, { useContext } from "react";
-import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Box } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Box,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext, AuthContextType } from "../../contexts/authContext/index";
 import icecupLogo from "../../logo/icecup-logo.jpg";
 import "./header.css";
@@ -10,6 +18,7 @@ const Header = () => {
   const authContext = useContext<AuthContextType | null>(AuthContext);
   const userLoggedIn = authContext?.userLoggedIn;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -19,17 +28,44 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const handleLogoClick = () => {
+    navigate("/home");
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
         <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-          <img src={icecupLogo} alt="Icecup Logo" className="logo" />
-          <Typography variant="h6" component="div" sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
-            <Link to="/home" className="nav-link">Home</Link>
-            <Link to="/apply" className="nav-link">Apply</Link>
-            {userLoggedIn && <Link to="/applications" className="nav-link">Applications</Link>}
-            {userLoggedIn && <Link to="/competitions" className="nav-link">Competitions</Link>}
-            <Link to="/faq" className="nav-link">FAQ</Link>
+          <img
+            src={icecupLogo}
+            alt="Icecup Logo"
+            className="logo"
+            onClick={handleLogoClick}
+          />
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+          >
+            <Link to="/home" className="nav-link">
+              Home
+            </Link>
+            <Link to="/apply" className="nav-link">
+              Apply
+            </Link>
+            {userLoggedIn && (
+              <Link to="/applications" className="nav-link">
+                Applications
+              </Link>
+            )}
+            {userLoggedIn && (
+              <Link to="/competitions" className="nav-link">
+                Competitions
+              </Link>
+            )}
+            <Link to="/faq" className="nav-link">
+              FAQ
+            </Link>
           </Typography>
         </Box>
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -58,19 +94,33 @@ const Header = () => {
             onClose={handleClose}
           >
             <MenuItem onClick={handleClose}>
-              <Link to="/home" className="nav-link menu-link">Home</Link>
+              <Link to="/home" className="nav-link menu-link">
+                Home
+              </Link>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <Link to="/apply" className="nav-link menu-link">Apply</Link>
+              <Link to="/apply" className="nav-link menu-link">
+                Apply
+              </Link>
             </MenuItem>
-            {userLoggedIn && <MenuItem onClick={handleClose}>
-              <Link to="/applications" className="nav-link menu-link">Applications</Link>
-            </MenuItem>}
-            {userLoggedIn && <MenuItem onClick={handleClose}>
-              <Link to="/competitions" className="nav-link menu-link">Competitions</Link>
-            </MenuItem>}
+            {userLoggedIn && (
+              <MenuItem onClick={handleClose}>
+                <Link to="/applications" className="nav-link menu-link">
+                  Applications
+                </Link>
+              </MenuItem>
+            )}
+            {userLoggedIn && (
+              <MenuItem onClick={handleClose}>
+                <Link to="/competitions" className="nav-link menu-link">
+                  Competitions
+                </Link>
+              </MenuItem>
+            )}
             <MenuItem onClick={handleClose}>
-              <Link to="/faq" className="nav-link menu-link">FAQ</Link>
+              <Link to="/faq" className="nav-link menu-link">
+                FAQ
+              </Link>
             </MenuItem>
           </Menu>
         </Box>
