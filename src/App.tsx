@@ -9,7 +9,9 @@ import { useRoutes } from "react-router-dom";
 import Applications from "./components/applications";
 import Competitions from "./components/competitions";
 import FAQ from "./components/FAQ";
-import EditApplication from "./components/edit-application"; // Import the new component
+import EditApplication from "./components/edit-application";
+import Teams from "./components/teams";
+import Nationalities from "./components/nationalities";
 
 function App() {
   const routesArray = [
@@ -48,6 +50,14 @@ function App() {
     {
       path: "/edit-application/:id",
       element: <EditApplication />,
+    },
+    {
+      path: "/teams",
+      element: <Teams />,
+    },
+    {
+      path: "/nationalities",
+      element: <Nationalities />,
     },
   ];
   let routesElement = useRoutes(routesArray);

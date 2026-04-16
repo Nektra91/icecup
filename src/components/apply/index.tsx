@@ -23,7 +23,9 @@ import {
   Paper,
   Box,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const Apply = () => {
   const [loading, setLoading] = useState(false);
@@ -72,6 +74,10 @@ const Apply = () => {
     }
   };
 
+  const handleRemoveMember = (index: number) => {
+    setTeamMembers(teamMembers.filter((_, i) => i !== index));
+  };
+
   const handleAddNationality = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (nationality) {
@@ -80,12 +86,20 @@ const Apply = () => {
     }
   };
 
+  const handleRemoveNationality = (index: number) => {
+    setNationalities(nationalities.filter((_, i) => i !== index));
+  };
+
   const handleAddCurlingClub = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (curlingClub) {
       setCurlingsClubs([...curlingsClubs, curlingClub]);
       setCurlingClub("");
     }
+  };
+
+  const handleRemoveCurlingClub = (index: number) => {
+    setCurlingsClubs(curlingsClubs.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -168,7 +182,14 @@ const Apply = () => {
                   </Button>
                   <List>
                     {teamMembers.map((member, index) => (
-                      <ListItem key={index}>
+                      <ListItem
+                        key={index}
+                        secondaryAction={
+                          <IconButton edge="end" aria-label="remove" onClick={() => handleRemoveMember(index)}>
+                            <ClearIcon color="error" />
+                          </IconButton>
+                        }
+                      >
                         <ListItemText primary={member} />
                       </ListItem>
                     ))}
@@ -186,7 +207,14 @@ const Apply = () => {
                   </Button>
                   <List>
                     {nationalities.map((nat, index) => (
-                      <ListItem key={index}>
+                      <ListItem
+                        key={index}
+                        secondaryAction={
+                          <IconButton edge="end" aria-label="remove" onClick={() => handleRemoveNationality(index)}>
+                            <ClearIcon color="error" />
+                          </IconButton>
+                        }
+                      >
                         <ListItemText primary={nat} />
                       </ListItem>
                     ))}
@@ -204,7 +232,14 @@ const Apply = () => {
                   </Button>
                   <List>
                     {curlingsClubs.map((club, index) => (
-                      <ListItem key={index}>
+                      <ListItem
+                        key={index}
+                        secondaryAction={
+                          <IconButton edge="end" aria-label="remove" onClick={() => handleRemoveCurlingClub(index)}>
+                            <ClearIcon color="error" />
+                          </IconButton>
+                        }
+                      >
                         <ListItemText primary={club} />
                       </ListItem>
                     ))}

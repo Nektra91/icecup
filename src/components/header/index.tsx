@@ -29,6 +29,8 @@ const Header = () => {
             <Link to="/apply" className="nav-link">Apply</Link>
             {userLoggedIn && <Link to="/applications" className="nav-link">Applications</Link>}
             {userLoggedIn && <Link to="/competitions" className="nav-link">Competitions</Link>}
+            <Link to="/teams" className="nav-link">Teams</Link>
+            <Link to="/nationalities" className="nav-link">Nationalities</Link>
             <Link to="/faq" className="nav-link">FAQ</Link>
           </Typography>
         </Box>
@@ -69,6 +71,12 @@ const Header = () => {
             {userLoggedIn && <MenuItem onClick={handleClose}>
               <Link to="/competitions" className="nav-link menu-link">Competitions</Link>
             </MenuItem>}
+            <MenuItem onClick={handleClose}>
+              <Link to="/teams" className="nav-link menu-link">Teams</Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Link to="/nationalities" className="nav-link menu-link">Nationalities</Link>
+            </MenuItem>
             <MenuItem onClick={handleClose}>
               <Link to="/faq" className="nav-link menu-link">FAQ</Link>
             </MenuItem>

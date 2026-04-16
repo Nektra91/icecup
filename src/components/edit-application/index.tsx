@@ -87,7 +87,7 @@ const EditApplication = () => {
       if (applicationToUpdate) {
         await updateDoc(competitionRef, {
           applications: applications.map((updatedApp) =>
-            updatedApp.id === application.id ? { ...updatedApp, accepted: true, curlingsClubs: curlingsClubs, nationalities: nationalities, teamMembers: teamMembers, teamName: teamName } : updatedApp
+            updatedApp.id === application.id ? { ...updatedApp, curlingsClubs, nationalities, teamMembers, teamName } : updatedApp
           ),
         });
       }

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm info:*)",
+      "Bash(npm install:*)",
+      "Bash(firebase --version)",
+      "Bash(cmd /c \"firebase --version\")",
+      "Bash(cmd /c \"npx tsc --version\")",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/typescript/package.json'\\).version\\)\")"
+    ]
+  }
+}
