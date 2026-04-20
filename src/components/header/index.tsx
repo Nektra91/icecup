@@ -9,6 +9,8 @@ import "./header.css";
 const Header = () => {
   const authContext = useContext<AuthContextType | null>(AuthContext);
   const userLoggedIn = authContext?.userLoggedIn;
+  const currentUser = authContext?.currentUser;
+  const displayName = currentUser?.displayName || currentUser?.email || "User";
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -29,10 +31,16 @@ const Header = () => {
             <Link to="/apply" className="nav-link">Apply</Link>
             {userLoggedIn && <Link to="/applications" className="nav-link">Applications</Link>}
             {userLoggedIn && <Link to="/competitions" className="nav-link">Competitions</Link>}
-            <Link to="/teams" className="nav-link">Teams</Link>
-            <Link to="/nationalities" className="nav-link">Nationalities</Link>
+            {userLoggedIn && <Link to="/teams" className="nav-link">Teams</Link>}
+            {userLoggedIn && <Link to="/nationalities" className="nav-link">Nationalities</Link>}
             <Link to="/faq" className="nav-link">FAQ</Link>
           </Typography>
+        </Box>
+        <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", ml: "auto" }}>
+          {userLoggedIn
+            ? <Typography variant="body1" sx={{ color: "white", fontWeight: 500 }}>{displayName}</Typography>
+            : <Link to="/login" className="nav-link">Login</Link>
+          }
         </Box>
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton
@@ -71,15 +79,19 @@ const Header = () => {
             {userLoggedIn && <MenuItem onClick={handleClose}>
               <Link to="/competitions" className="nav-link menu-link">Competitions</Link>
             </MenuItem>}
-            <MenuItem onClick={handleClose}>
+            {userLoggedIn && <MenuItem onClick={handleClose}>
               <Link to="/teams" className="nav-link menu-link">Teams</Link>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
+            </MenuItem>}
+            {userLoggedIn && <MenuItem onClick={handleClose}>
               <Link to="/nationalities" className="nav-link menu-link">Nationalities</Link>
-            </MenuItem>
+            </MenuItem>}
             <MenuItem onClick={handleClose}>
               <Link to="/faq" className="nav-link menu-link">FAQ</Link>
             </MenuItem>
+            {userLoggedIn
+              ? <MenuItem disabled><Typography variant="body2" sx={{ color: "text.secondary" }}>{displayName}</Typography></MenuItem>
+              : <MenuItem onClick={handleClose}><Link to="/login" className="nav-link menu-link">Login</Link></MenuItem>
+            }
           </Menu>
         </Box>
       </Toolbar>

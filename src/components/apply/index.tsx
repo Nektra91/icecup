@@ -8,6 +8,7 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  addDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -132,6 +133,14 @@ const Apply = () => {
       await updateDoc(competitionRef, {
         applications: arrayUnion(applicationData),
       });
+
+      await addDoc(collection(db, "applicationSubmissions"), {
+        responsibleEmail,
+        responsibleName,
+        teamName,
+        competitionName: activeCompetitions[0].name,
+      });
+
       navigate("/");
     } catch (error) {
       console.error("Error submitting application:", error);

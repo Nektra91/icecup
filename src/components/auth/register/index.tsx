@@ -1,114 +1,133 @@
 import React, { useContext, useState } from "react";
 import { Navigate, Link } from "react-router-dom";
-import {
-  AuthContext,
-  AuthContextType,
-} from "../../../contexts/authContext/index";
+import { AuthContext, AuthContextType } from "../../../contexts/authContext/index";
 import { doCreateUserWithEmailAndPassword } from "../../../firebase/auth";
+import {
+  Box,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  Divider,
+} from "@mui/material";
+import icecupLogo from "../../../logo/icecup-logo.jpg";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setconfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
+  const [error, setError] = useState("");
 
   const authContext = useContext<AuthContextType | null>(AuthContext);
   const userLoggedIn = authContext?.userLoggedIn;
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isRegistering) {
-      setIsRegistering(true);
+    if (isRegistering) return;
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    setError("");
+    setIsRegistering(true);
+    try {
       await doCreateUserWithEmailAndPassword(email, password);
+    } catch {
+      setError("Could not create account. Please try again.");
+      setIsRegistering(false);
     }
   };
 
+  if (userLoggedIn) return <Navigate to="/home" replace />;
+
   return (
-    <>
-      {userLoggedIn && <Navigate to={"/home"} replace={true} />}
+    <Box
+      sx={{
+        minHeight: "calc(100vh - 64px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #e3f0ff 0%, #f5f5f5 100%)",
+        px: 2,
+      }}
+    >
+      <Card sx={{ width: "100%", maxWidth: 420, borderRadius: 3, boxShadow: 6 }}>
+        <CardContent sx={{ p: 4 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 3 }}>
+            <img src={icecupLogo} alt="Icecup Logo" style={{ width: 72, height: 72, borderRadius: 12, marginBottom: 16 }} />
+            <Typography variant="h5" fontWeight={700} color="text.primary">
+              Create an account
+            </Typography>
+            <Typography variant="body2" color="text.secondary" mt={0.5}>
+              Join Icecup today
+            </Typography>
+          </Box>
 
-      <main className="w-full h-screen flex self-center place-content-center place-items-center">
-        <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl">
-          <div className="text-center mb-6">
-            <div className="mt-2">
-              <h3 className="text-gray-800 text-xl font-semibold sm:text-2xl">
-                Create a New Account
-              </h3>
-            </div>
-          </div>
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div>
-              <label className="text-sm text-gray-600 font-bold">Email</label>
-              <input
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-              />
-            </div>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-            <div>
-              <label className="text-sm text-gray-600 font-bold">
-                Password
-              </label>
-              <input
-                disabled={isRegistering}
-                type="password"
-                autoComplete="new-password"
-                required
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="text-sm text-gray-600 font-bold">
-                Confirm Password
-              </label>
-              <input
-                disabled={isRegistering}
-                type="password"
-                autoComplete="off"
-                required
-                value={confirmPassword}
-                onChange={(e) => {
-                  setconfirmPassword(e.target.value);
-                }}
-                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
-              />
-            </div>
-
-            <button
-              type="submit"
+          <Box component="form" onSubmit={onSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <TextField
+              label="Email"
+              type="email"
+              autoComplete="email"
+              required
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               disabled={isRegistering}
-              className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
-                isRegistering
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition duration-300"
-              }`}
+            />
+            <TextField
+              label="Password"
+              type="password"
+              autoComplete="new-password"
+              required
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={isRegistering}
+            />
+            <TextField
+              label="Confirm Password"
+              type="password"
+              autoComplete="off"
+              required
+              fullWidth
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              disabled={isRegistering}
+              error={confirmPassword.length > 0 && password !== confirmPassword}
+              helperText={confirmPassword.length > 0 && password !== confirmPassword ? "Passwords do not match" : ""}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              fullWidth
+              disabled={isRegistering}
+              sx={{ mt: 1, py: 1.5, fontWeight: 600, borderRadius: 2 }}
             >
-              {isRegistering ? "Signing Up..." : "Sign Up"}
-            </button>
-            <div className="text-sm text-center">
-              Already have an account? {"   "}
-              <Link
-                to={"/login"}
-                className="text-center text-sm hover:underline font-bold"
-              >
-                Continue
-              </Link>
-            </div>
-          </form>
-        </div>
-      </main>
-    </>
+              {isRegistering ? "Creating account…" : "Sign up"}
+            </Button>
+          </Box>
+
+          <Divider sx={{ my: 3 }} />
+
+          <Typography variant="body2" textAlign="center" color="text.secondary">
+            Already have an account?{" "}
+            <Link to="/login" style={{ fontWeight: 600, color: "inherit" }}>
+              Sign in
+            </Link>
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 
