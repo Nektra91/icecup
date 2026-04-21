@@ -12,6 +12,7 @@ import FAQ from "./components/FAQ";
 import EditApplication from "./components/edit-application";
 import Teams from "./components/teams";
 import Nationalities from "./components/nationalities";
+import ApplicationAccess from "./components/application-access";
 
 function App() {
   const routesArray = [
@@ -58,6 +59,10 @@ function App() {
     {
       path: "/nationalities",
       element: <Nationalities />,
+    },
+    {
+      path: "/application/:token",
+      element: <ApplicationAccess />,
     },
   ];
   let routesElement = useRoutes(routesArray);

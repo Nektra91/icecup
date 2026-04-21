@@ -37,7 +37,7 @@ export const sendEmail = onCall(
 
     const resend = new Resend(resendApiKey.value());
     const { error } = await resend.emails.send({
-      from: "Icecup <onboarding@resend.dev>",
+      from: "Icecup <noreply@icecupakureyri.com>",
       to,
       subject,
       html,
@@ -55,25 +55,33 @@ export const onApplicationSubmitted = onDocumentCreated(
     const data = event.data?.data();
     if (!data) return;
 
-    const { responsibleEmail, responsibleName, teamName, competitionName } = data as {
+    const { responsibleEmail, responsibleName, teamName, competitionName, token, pin } = data as {
       responsibleEmail: string;
       responsibleName: string;
       teamName: string;
       competitionName: string;
+      token: string;
+      pin: string;
     };
 
     if (!responsibleEmail) return;
 
+    const appUrl = `https://icecupakureyri.com/application/${token}`;
+
     const resend = new Resend(resendApiKey.value());
     await resend.emails.send({
-      from: "Icecup <onboarding@resend.dev>",
+      from: "Icecup <noreply@icecupakureyri.com>",
       to: responsibleEmail,
       subject: `Application received — ${competitionName}`,
       html: `
         <h2>Thanks for applying, ${responsibleName}!</h2>
         <p>We've received your application for <strong>${teamName}</strong> to compete in <strong>${competitionName}</strong>.</p>
-        <p>We'll be in touch once your application has been reviewed.</p>
+        <p>You can view or edit your application at any time using the link below:</p>
+        <p><a href="${appUrl}">${appUrl}</a></p>
+        <p><strong>Your PIN: ${pin}</strong></p>
+        <p>Keep this email safe — you'll need the PIN to access your application.</p>
         <br/>
+        <p>We'll be in touch once your application has been reviewed.</p>
         <p>— The Icecup Team</p>
       `,
     });

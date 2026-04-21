@@ -13,6 +13,18 @@ service cloud.firestore {
       allow read, update, delete: if false;
     }
 
+    // Anyone can query applications by token field or update their own
+    match /applications/{docId} {
+      allow read, update: if true;
+      allow create, delete: if false;
+    }
+
+    // Public read — needed for the apply form to show active competitions
+    match /competitions/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     // Default: authenticated users can read/write their own data
     match /{document=**} {
       allow read, write: if request.auth != null;

@@ -1,5 +1,7 @@
 export interface Application {
   id: string;
+  token: string;
+  pin: string;
   accepted: boolean;
   appliedOn: string;
   curlingsClubs: string[];
@@ -8,6 +10,7 @@ export interface Application {
   responsibleName: string;
   teamMembers: string[];
   teamName: string;
+  competitionId: string;
 }
 
 export interface Competition {

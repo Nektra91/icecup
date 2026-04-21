@@ -10,7 +10,9 @@
       "Bash(node -e \"console.log\\(require\\('./node_modules/typescript/package.json'\\).version\\)\")",
       "Bash(firebase projects:list)",
       "Bash(firebase functions:secrets:set RESEND_API_KEY)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(firebase deploy *)",
+      "Bash(firebase functions:delete onApplicationSubmitted --region us-central1 --force)"
     ]
   }
 }
